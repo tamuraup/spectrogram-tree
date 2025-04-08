@@ -6,6 +6,7 @@ import PyQt5.QtMultimedia as QM
 import pyqtgraph as pg
 from widget_main import WidgetMain
 
+import os
 
 class SpectrogramTree(WidgetMain):
     def __init__(self):
@@ -61,7 +62,7 @@ class SpectrogramTree(WidgetMain):
 
         if self.w_mp.player.state() != QM.QMediaPlayer.PlayingState:
             # musicplayerの再生位置の調整
-            self.w_mp.player.setPosition(pos*1000)  # ms 単位で渡す
+            self.w_mp.player.setPosition(int(pos)*1000)  # ms 単位で渡す
 
     def item_double_cliced(self, index):
         '''
@@ -69,6 +70,9 @@ class SpectrogramTree(WidgetMain):
         グラフを更新。
         '''
         path = index.model().filePath(index)
+
+        if os.path.isdir(path):
+            return
 
         # import librosa
         # data, sr = librosa.load(path, sr=None)

@@ -3,6 +3,7 @@ import scipy.signal as ss
 import numpy as np
 import PyQt5.QtWidgets as QW
 import pyqtgraph as pg
+from pyqtgraph.Qt import QtGui
 
 
 class WidgetPlot(QW.QWidget):
@@ -14,8 +15,10 @@ class WidgetPlot(QW.QWidget):
         self.y = 0
         self.sr = 0
 
-        self.w_signal = pg.GraphicsWindow()
-        self.w_spec = pg.GraphicsWindow()
+        # 信号表示 layout
+        self.w_signal = pg.GraphicsLayoutWidget()
+        # スペクトログラム表示 layout
+        self.w_spec = pg.GraphicsLayoutWidget()
 
         self.p_signal = self.w_signal.addPlot()
         self.plot_signal = self.p_signal.plot(pen=('#0F8EBB50'))
@@ -32,19 +35,16 @@ class WidgetPlot(QW.QWidget):
         self.p_signal.setLabel('bottom', 'Time', 's')
         self.p_signal.setLabel('left', 'Intensity')
         self.p_signal.showGrid(x=True, y=True, alpha=0.7)
-        self.p_signal.addItem(self.plot_signal)
 
         # spectrogram
         self.img = pg.ImageItem()
         self.p_spec.addItem(self.img)
         self.hist.setImageItem(self.img)
-        # self.p_spec.addItem(self.hist)
         self.hist.gradient.restoreState(
             {'mode': 'rgb',
              'ticks': [(0.5, (0, 182, 188, 255)),
                        (1.0, (246, 111, 0, 255)),
                        (0.0, (75, 0, 113, 255))]})
-        # self.w_spec.addItem(self.hist)
 
         self.p_spec.setLabel('bottom', "Time", units='s')
         self.p_spec.setLabel('left', "Frequency", units='Hz')
@@ -63,7 +63,7 @@ class WidgetPlot(QW.QWidget):
 
         spec = self.amplitude_to_db(Zxx)
         t = len(signal) / sr
-        f = int(sr)/2
+        f = int(sr) / 2
         return f, t, spec
 
     def update_plot(self):
@@ -75,12 +75,13 @@ class WidgetPlot(QW.QWidget):
     def update_spectrogram(self):
         f, t, spec = self.get_spectrogram(self.y, self.sr)
 
-        self.img = pg.ImageItem()
-        self.p_spec.addItem(self.img)
-        self.hist.setImageItem(self.img)
+        # スケール合わせ (x: freq/width, y: time/height)
+        # ref: https://pyqtgraph.readthedocs.io/en/latest/api_reference/graphicsItems/imageitem.html#scale-and-position-imageitem
+        tr = QtGui.QTransform()
+        tr.scale(t / spec.shape[1], f / spec.shape[0])
+        self.img.setTransform(tr)
 
-        self.img.scale(t/spec.shape[1], f/spec.shape[0])
-        self.img.setImage(spec)
+        self.img.setImage(spec, autoLevels=True)
         self.p_spec.setXRange(0, t, padding=0)
         self.p_spec.setYRange(0, f, padding=0)
 
@@ -88,7 +89,7 @@ class WidgetPlot(QW.QWidget):
         self.sr = sr
         signal = signal.astype('float16')
         self.y = signal
-        self.x = np.arange(0, len(signal))/sr
+        self.x = np.arange(0, len(signal)) / sr
 
         self.update_plot()
         self.update_spectrogram()
@@ -99,7 +100,7 @@ class WidgetPlot(QW.QWidget):
         ref_value = np.abs(ref)
 
         return self.power_to_db(
-                power, ref=ref_value**2, amin=amin**2, top_db=top_db)
+            power, ref=ref_value ** 2, amin=amin ** 2, top_db=top_db)
 
     def power_to_db(self, S, ref=1.0, amin=1e-10, top_db=80.0):
         S = np.asarray(S)
