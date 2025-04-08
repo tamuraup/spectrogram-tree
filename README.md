@@ -14,10 +14,12 @@ https://github.com/fkubota/spectrogram-tree/blob/master/LICENSE
 
 本リポジトリでの改変内容は、コミットログを参照してください。
 
-
 ## インストール
 
-Python 3.12.9 で動作確認済み。
+以下環境で動作確認済みです。
+
+- Ubuntu 24.04
+- Python 3.12.9
 
 ### ビルド
 
