@@ -18,7 +18,7 @@ https://github.com/fkubota/spectrogram-tree/blob/master/LICENSE
 
 以下環境で動作確認済みです。
 
-- Ubuntu 24.04
+- ~~Ubuntu 24.04~~ 
 - Python 3.12.9
 
 ### ビルド
@@ -36,6 +36,11 @@ make build  # または `make -B build` を使用
 ### アプリケーションの実行
 
 `./dist/spectrogram_tree/spectrogram_tree` を実行してアプリケーションを起動します。
+
++ **私の ubuntu 24.04 だとビルドしたアプリでは音声が再生されませんでした…。**   
+  `python src/spectrogram_tree.py` で実行すれば音声は再生されます。よくわかりません、助けてください。
+
++ macOS ではビルドしたアプリでも音声が再生されるようです。
 
 ## 使い方
 
