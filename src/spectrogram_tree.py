@@ -4,11 +4,10 @@ import numpy as np
 import PyQt5.QtWidgets as QW
 import PyQt5.QtMultimedia as QM
 import pyqtgraph as pg
+from PyQt5.QtCore import QFileInfo
 
 from config import parser
 from widget_main import WidgetMain
-
-import os
 
 
 class SpectrogramTree(WidgetMain):
@@ -74,7 +73,8 @@ class SpectrogramTree(WidgetMain):
         '''
         path = index.model().filePath(index)
 
-        if os.path.isdir(path):
+        path_info = QFileInfo(path)
+        if path_info.isDir():
             return
 
         # import librosa
