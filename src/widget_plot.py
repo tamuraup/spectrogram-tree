@@ -1,3 +1,4 @@
+# **2025-04-08** : PyQtGraph のバージョンアップに合わせて修正
 import sys
 import scipy.signal as ss
 import numpy as np
@@ -14,17 +15,19 @@ class WidgetPlot(QW.QWidget):
         self.y = 0
         self.sr = 0
 
-        self.w_signal = pg.GraphicsWindow()
-        self.w_spec = pg.GraphicsWindow()
+        # 信号表示 layout
+        self.w_signal = pg.GraphicsLayoutWidget()
+        # スペクトログラム表示 layout
+        self.w_spec = pg.GraphicsLayoutWidget()
 
         self.p_signal = self.w_signal.addPlot()
         self.plot_signal = self.p_signal.plot(pen=('#0F8EBB50'))
-
+        #
         self.p_spec = self.w_spec.addPlot()
         self.hist = pg.HistogramLUTItem()
-
+        #
         self.init_ui()
-        self.init_event()
+        # self.init_event()
 
     def init_ui(self):
         # signal
@@ -32,7 +35,6 @@ class WidgetPlot(QW.QWidget):
         self.p_signal.setLabel('bottom', 'Time', 's')
         self.p_signal.setLabel('left', 'Intensity')
         self.p_signal.showGrid(x=True, y=True, alpha=0.7)
-        self.p_signal.addItem(self.plot_signal)
 
         # spectrogram
         self.img = pg.ImageItem()
