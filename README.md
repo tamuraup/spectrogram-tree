@@ -12,7 +12,7 @@ clone していない理由は、オリジナルのリポジトリが重く、�
 
 https://github.com/fkubota/spectrogram-tree/blob/master/LICENSE
 
-本リポジトリでの改変内容は、コミットログを参照してください。
+本リポジトリでの改変内容は [PR](https://github.com/tamuraup/spectrogram-tree/pulls?q=is%3Aclosed+is%3Amerged+) またはコミットログを参照してください。
 
 ## インストール
 
