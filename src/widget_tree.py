@@ -2,6 +2,8 @@ import sys
 import PyQt5.QtWidgets as QW
 import PyQt5.QtCore as QC
 
+from config import parser
+
 
 class WidgetTree(QW.QWidget):
     def __init__(self):
@@ -24,9 +26,25 @@ class WidgetTree(QW.QWidget):
         self.setLayout(vhox0)
 
     def init_method(self):
+        root_path = QC.QDir.homePath()
+
+        # ルートディレクトリが指定されていればそれをルートに設定します
+        if len(QC.QCoreApplication.arguments()) >= 1:
+            try:
+                args = parser.parse_args(QC.QCoreApplication.arguments()[1:])
+                if args.root_dir:
+                    d = QC.QDir(args.root_dir)
+                    if d.exists():
+                        root_path = d.path()
+
+            except Exception as e:
+                # TODO: Fix the error handling
+                print(e)
+                pass
+
         self.model.setRootPath('')
         self.tree.setModel(self.model)
-        self.tree.setRootIndex(self.model.index(QC.QDir.homePath()))
+        self.tree.setRootIndex(self.model.index(root_path))
         self.tree.setAnimated(False)
         self.tree.setIndentation(20)
         self.tree.setSortingEnabled(True)
