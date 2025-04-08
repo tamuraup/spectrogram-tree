@@ -1,23 +1,21 @@
 # spectrogram-tree
-すばやくスペクトログラムが見たいという状況によく出くわすので、さくっと確認するために作ったツール。  
 
-## このアプリはなに？  
-ディレクトリツリーのアイテムをダブルクリックするだけでスペクトログラムが見れます。
-signalとスペクトログラムを並べつつ、音も再生できます。
+これは以下のリポジトリをコピーし、改変したものです。
 
-![Not Found](https://raw.github.com/wiki/fkubota/spectrogram-tree/images/spectrogram-tree.gif)
+[spectrogram-tree (original)](https://github.com/fkubota/spectrogram-tree)
 
+clone していない理由は、オリジナルのリポジトリが重く、そのまま継承したくなかったからです。
 
-## 使い方
-- 説明の必用なさそう...
+## lisence
 
-## Installation(linux)
-- 1分で使いたい人向け
-    - 実行ファイルがビルドされているのでそれを動かすだけです
-    - 手順
-        1. リポジトリをクローンする
-        1. `chmod u+x spectrogram-tree/app/dist/spectrogram-tree/spectrogram-tree`  <--- 実行権限付与
-        1. `./spectrogram-tree/app/dist/spectrogram-tree/spectrogram-tree`  <--- 実行
+オリジナルのライセンスは以下
 
-- developer 向けの説明
-	- 今度書く
+https://github.com/fkubota/spectrogram-tree/blob/master/LICENSE
+
+本リポジトリでの改変内容は、基本的にソースコードに記載します。ソースコードに書けない変更は以下改変内容に記載します。
+
+## 改変内容
+
+### 2025-04-08
+
+- `/app`, `/app_windows`, `/notebook` を削除
