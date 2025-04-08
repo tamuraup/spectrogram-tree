@@ -4,9 +4,11 @@ import numpy as np
 import PyQt5.QtWidgets as QW
 import PyQt5.QtMultimedia as QM
 import pyqtgraph as pg
+from PyQt5.QtCore import QFileInfo
+
+from config import parser
 from widget_main import WidgetMain
 
-import os
 
 class SpectrogramTree(WidgetMain):
     def __init__(self):
@@ -14,9 +16,9 @@ class SpectrogramTree(WidgetMain):
 
         # bar
         self.bar_0 = pg.InfiniteLine(
-                        pen='#FAF032AA', hoverPen='#FAF032FF', movable=True)
+            pen='#FAF032AA', hoverPen='#FAF032FF', movable=True)
         self.bar_1 = pg.InfiniteLine(
-                        pen='#FAF032AA', hoverPen='#FAF032FF', movable=True)
+            pen='#FAF032AA', hoverPen='#FAF032FF', movable=True)
 
         # init method
         self.init_method_()
@@ -39,15 +41,15 @@ class SpectrogramTree(WidgetMain):
         self.bar_1.sigPositionChanged.connect(self.update_bar_pos)
         self.w_tree.tree.doubleClicked.connect(self.item_double_cliced)
         self.w_plot.p_signal.scene().sigMouseClicked.connect(
-                                        self.clicked_window)
+            self.clicked_window)
         self.w_plot.p_spec.scene().sigMouseClicked.connect(
-                                        self.clicked_window)
+            self.clicked_window)
 
     def player_position_changed(self, pos, senderType=False):
         '''
         music player の時間に変更があったら動く関数
         '''
-        pos_sec = pos/1000
+        pos_sec = pos / 1000
         self.bar_0.setPos(pos_sec)
         self.bar_1.setPos(pos_sec)
 
@@ -62,7 +64,7 @@ class SpectrogramTree(WidgetMain):
 
         if self.w_mp.player.state() != QM.QMediaPlayer.PlayingState:
             # musicplayerの再生位置の調整
-            self.w_mp.player.setPosition(int(pos)*1000)  # ms 単位で渡す
+            self.w_mp.player.setPosition(int(pos) * 1000)  # ms 単位で渡す
 
     def item_double_cliced(self, index):
         '''
@@ -71,7 +73,8 @@ class SpectrogramTree(WidgetMain):
         '''
         path = index.model().filePath(index)
 
-        if os.path.isdir(path):
+        path_info = QFileInfo(path)
+        if path_info.isDir():
             return
 
         # import librosa
@@ -84,7 +87,7 @@ class SpectrogramTree(WidgetMain):
         a = pydub.AudioSegment.from_file(path, format=ext)
         sr = a.frame_rate
         data = np.array(a.get_array_of_samples()[::a.channels])
-        data = data/data.max()
+        data = data / data.max()
         data = data if data.ndim == 1 else data.mean(axis=1)
         self.w_plot.set_signal(data, sr)
         self.w_mp.set_contents(path)
@@ -98,8 +101,9 @@ class SpectrogramTree(WidgetMain):
 
 
 def main():
-    app = QW.QApplication(sys.argv)
+    _ = parser.parse_args()
 
+    app = QW.QApplication(sys.argv)
     w = SpectrogramTree()
     w.move(300, 300)
 

@@ -36,3 +36,11 @@ make build  # または `make -B build` を使用
 ### アプリケーションの実行
 
 `./dist/spectrogram_tree/spectrogram_tree` を実行してアプリケーションを起動します。
+
+## 使い方
+
+```bash
+spectrogram_tree [--root_dir=<ツリー表示するルートディレクトリ>]
+```
+
+`--root_dir` オプションで、ツリー表示するルートディレクトリを指定できます。
